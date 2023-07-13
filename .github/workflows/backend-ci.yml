@@ -14,7 +14,7 @@ jobs:
       postgres:
         image: postgres
         env:
-          POSTGRE_USER: connor
+          POSTGRES_USER: connor
           POSTGRES_PASSWORD: password
           POSTGRES_DB: customer
         ports:
