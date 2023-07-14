@@ -119,7 +119,6 @@ jobs:
 
       - name: Commit and push Dockerrun.aws.json
         run: |
-          git checkout main
           git config user.name github-actions
           git config user.email github-actions@github.com
           git add .
