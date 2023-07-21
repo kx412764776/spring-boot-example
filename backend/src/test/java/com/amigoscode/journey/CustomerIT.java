@@ -3,6 +3,7 @@ package com.amigoscode.journey;
 import com.amigoscode.customer.Customer;
 import com.amigoscode.customer.CustomerRegistrationRequest;
 import com.amigoscode.customer.CustomerUpdateRequest;
+import com.amigoscode.customer.Gender;
 import com.github.javafaker.Faker;
 import com.github.javafaker.Name;
 import org.junit.jupiter.api.Test;
@@ -37,8 +38,10 @@ public class CustomerIT {
         String email = fakerName.lastName() + "-" + UUID.randomUUID() + "@amigoscode.com";
         int age = RANDOM.nextInt(1, 100);
 
+        Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
+
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
-                name, email, age
+                name, email, age, gender
         );
 
         // send a post request
@@ -63,8 +66,7 @@ public class CustomerIT {
 
         // make sure that customer is present
         Customer expectedCustomer = new Customer(
-                name, email, age
-        );
+                name, email, age, gender);
 
         // 忽略id
         assertThat(allCustomers)
@@ -100,8 +102,10 @@ public class CustomerIT {
         String email = fakerName.lastName() + "-" + UUID.randomUUID() + "@amigoscode.com";
         int age = RANDOM.nextInt(1, 100);
 
+        Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
+
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
-                name, email, age
+                name, email, age, gender
         );
 
         // send a post request
@@ -157,8 +161,10 @@ public class CustomerIT {
         String email = fakerName.lastName() + "-" + UUID.randomUUID() + "@amigoscode.com";
         int age = RANDOM.nextInt(1, 100);
 
+        Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
+
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
-                name, email, age
+                name, email, age, gender
         );
 
         // send a post request
@@ -195,9 +201,10 @@ public class CustomerIT {
         String updatedName = fakerName.fullName();
         String updatedEmail = fakerName.lastName() + "-" + UUID.randomUUID() + "@amigoscode.com";
         int updatedAge = RANDOM.nextInt(1, 100);
+        Gender updatedGender = updatedAge % 2 ==0 ? Gender.MALE : Gender.FEMALE;
 
         CustomerUpdateRequest update = new CustomerUpdateRequest(
-                updatedName, updatedEmail, updatedAge
+                updatedName, updatedEmail, updatedAge, updatedGender
         );
 
         webTestClient.put()
@@ -224,8 +231,7 @@ public class CustomerIT {
                 .usingRecursiveComparison()
                 .ignoringFields("id")
                 .isEqualTo(new Customer(
-                        updatedName, updatedEmail, updatedAge
-                ));
-
+                        updatedName, updatedEmail, updatedAge, updatedGender
+                        ));
     }
 }

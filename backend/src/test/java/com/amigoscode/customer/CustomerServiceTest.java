@@ -3,7 +3,6 @@ package com.amigoscode.customer;
 import com.amigoscode.exception.DuplicateResourceException;
 import com.amigoscode.exception.RequestValidationException;
 import com.amigoscode.exception.ResourceNotFoundException;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
+import java.util.Random;
 
 import static org.mockito.Mockito.*;
 import static org.assertj.core.api.Assertions.*;
@@ -40,8 +40,8 @@ class CustomerServiceTest {
         //Given
         int id = 10;
         Customer customer = new Customer(
-                id, "Alex", "alex@gmail.com", 19
-        );
+                id, "Alex", "alex@gmail.com", 19,
+                Gender.MALE);
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
 
         //When
@@ -74,7 +74,7 @@ class CustomerServiceTest {
 
         when(customerDao.existsPersonWithEmail(email)).thenReturn(false);
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
-                "Alex", email, 19
+                "Alex", email, 19, Gender.MALE
         );
 
         //When
@@ -102,7 +102,7 @@ class CustomerServiceTest {
 
         when(customerDao.existsPersonWithEmail(email)).thenReturn(true);
         CustomerRegistrationRequest request = new CustomerRegistrationRequest(
-                "Alex", email, 19
+                "Alex", email, 19, Gender.MALE
         );
 
         //When
@@ -151,13 +151,17 @@ class CustomerServiceTest {
         //Given
         int id = 10;
         Customer customer = new Customer(
-                id, "Alex", "alex@gmail.com", 19
-        );
+                id, "Alex", "alex@gmail.com", 19,
+                Gender.MALE);
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
 
         String newEmail = "alexandro@amigoscode.com";
+
+        int age = new Random().nextInt(16, 99);
+        Gender gender = age % 2 ==0 ? Gender.MALE : Gender.FEMALE;
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(
-                "Alexandro", newEmail, 23);
+                "Alexandro", newEmail, 23, gender
+        );
 
         when(customerDao.existsPersonWithEmail(newEmail)).thenReturn(false);
         //When
@@ -179,12 +183,13 @@ class CustomerServiceTest {
         //Given
         int id = 10;
         Customer customer = new Customer(
-                id, "Alex", "alex@gmail.com", 19
-        );
+                id, "Alex", "alex@gmail.com", 19,
+                Gender.MALE);
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
 
+
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(
-                "Alexandro", null, null);
+                "Alexandro", null, null, null);
 
 
         //When
@@ -206,13 +211,13 @@ class CustomerServiceTest {
         //Given
         int id = 10;
         Customer customer = new Customer(
-                id, "Alex", "alex@gmail.com", 19
-        );
+                id, "Alex", "alex@gmail.com", 19,
+                Gender.MALE);
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
 
         String newEmail = "alexandro@amigoscode.com";
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(
-                null, newEmail, null);
+                null, newEmail, null, null);
 
         when(customerDao.existsPersonWithEmail(newEmail)).thenReturn(false);
 
@@ -236,12 +241,12 @@ class CustomerServiceTest {
         //Given
         int id = 10;
         Customer customer = new Customer(
-                id, "Alex", "alex@gmail.com", 19
-        );
+                id, "Alex", "alex@gmail.com", 19,
+                Gender.MALE);
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
 
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(
-                null, null, 23);
+                null, null, 23, null);
 
 
         //When
@@ -263,13 +268,13 @@ class CustomerServiceTest {
         //Given
         int id = 10;
         Customer customer = new Customer(
-                id, "Alex", "alex@gmail.com", 19
-        );
+                id, "Alex", "alex@gmail.com", 19,
+                Gender.MALE);
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
 
         String newEmail = "alexandro@amigoscode.com";
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(
-                null, newEmail, null);
+                null, newEmail, null, null);
 
         when(customerDao.existsPersonWithEmail(newEmail)).thenReturn(true);
 
@@ -287,13 +292,13 @@ class CustomerServiceTest {
         //Given
         int id = 10;
         Customer customer = new Customer(
-                id, "Alex", "alex@gmail.com", 19
-        );
+                id, "Alex", "alex@gmail.com", 19,
+                Gender.MALE);
         when(customerDao.selectCustomerById(id)).thenReturn(Optional.of(customer));
 
         String newEmail = "alexandro@amigoscode.com";
         CustomerUpdateRequest updateRequest = new CustomerUpdateRequest(
-                customer.getName(), customer.getEmail(), customer.getAge());
+                customer.getName(), customer.getEmail(), customer.getAge(), customer.getGender());
 
         //When
         assertThatThrownBy(() -> underTest.updateCustomer(id, updateRequest))
