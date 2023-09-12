@@ -10,77 +10,18 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Random;
+import java.util.UUID;
 
 
 @SpringBootApplication
 public class Main {
 
-
     public static void main(String[] args) {
-
         ConfigurableApplicationContext applicationContext = SpringApplication.run(Main.class, args);
-
-
     }
-
-    @Bean
-    CommandLineRunner runner(CustomerRepository customerRepository){
-        return args -> {
-            var faker = new Faker();
-            Random random = new Random();
-            Name name = faker.name();
-            String firstName = name.firstName();
-            String lastName = name.lastName();
-            int age = random.nextInt(16, 99);
-            Gender gender = age % 2 ==0 ? Gender.MALE: Gender.FEMALE;
-            Customer customer = new Customer(
-                    firstName + " " + lastName,
-                    firstName.toLowerCase() + "." + lastName.toLowerCase() + "@amigoscode.com",
-                    age,
-                    gender);
-
-            customerRepository.save(customer);
-        };
-    }
-
-    @Bean("foo")
-    public Foo getFoo() {
-        return new Foo("bar");
-    }
-
-    record Foo(String name) {}
-
-
-    private static void printBeans(ConfigurableApplicationContext ctx){
-        String[] beanDefinitionNames = ctx.getBeanDefinitionNames();
-        for (String beanDefinitionName :
-                beanDefinitionNames) {
-            System.out.println(beanDefinitionName);
-        }
-    }
-
-
-    //    @GetMapping("/greet")
-//    public GreetResponse greet(
-//            @RequestParam(value = "name", required = false) String name) {
-//        String greetMessage = name ==null || name.isBlank() ? "Hello" : "Hello " + name;
-//        GreetResponse response = new GreetResponse(
-//                greetMessage,
-//                List.of("Java", "Golang", "Javascript"),
-//                new Person("Alex", 22, 30_000)
-//        );
-//        return response;
-//    }
-//
-//    record Person(String name, int age, double savings){}
-//
-//    record GreetResponse(
-//            String greet,
-//            List<String> favProgrammingLanguages,
-//            Person person
-//    ) {}
 
 }
 
